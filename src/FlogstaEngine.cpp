@@ -38,7 +38,31 @@ int main(int argc, char *argv[]) {
       SDL_Delay( 2000 );
     }
   }
+  //Main loop flag
+  bool quit = false;
+  
+  //Event handler
+  SDL_Event e;
 
+  while(!quit) {
+    while( SDL_PollEvent( &e ) != 0 ){ //User requests quit
+      switch(e.type) {
+      case SDL_QUIT:
+	quit = true;
+	break;
+      case SDL_KEYDOWN:
+	switch(e.key.keysym.sym) {
+	case SDLK_e:
+	  printf("eeeee\n");
+	  break;
+	case SDLK_q:
+	  quit = true;
+	  break;
+	}
+	break;
+      }
+    }
+  }
   //Destroy window
   SDL_DestroyWindow( window );
   //Quit SDL subsystems
