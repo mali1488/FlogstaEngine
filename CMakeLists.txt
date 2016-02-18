@@ -13,3 +13,6 @@ add_subdirectory(src)
 # Printing
 message("binary tree path: ${PROJECT_BINARY_DIR}")
 message("CXX FLAGS: ${CMAKE_CXX_FLAGS}")
+
+# Adding target executable
+
