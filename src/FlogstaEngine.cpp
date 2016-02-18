@@ -1,9 +1,4 @@
-#if defined MACOSX
-#include <OpenGL/gl.h>
-#elif defined LINUX
-#include <GL/gl.h>
-#endif
-#include <SDL.h>
+#include "LibIncludes.hpp"
 
 //Screen dimension constants
 
@@ -35,7 +30,6 @@ int main(int argc, char *argv[]) {
       //Update the surface
       SDL_UpdateWindowSurface( window );
       //Wait two seconds
-      SDL_Delay( 2000 );
     }
   }
   //Main loop flag
@@ -48,6 +42,7 @@ int main(int argc, char *argv[]) {
     while( SDL_PollEvent( &e ) != 0 ){ //User requests quit
       switch(e.type) {
       case SDL_QUIT:
+        puts("QUIT FÖR FANOAN");
 	quit = true;
 	break;
       case SDL_KEYDOWN:
@@ -56,8 +51,10 @@ int main(int argc, char *argv[]) {
 	  printf("eeeee\n");
 	  break;
 	case SDLK_q:
-	  quit = true;
-	  break;
+          SDL_Event sdlEvent;
+          sdlEvent.type = SDL_QUIT;
+          SDL_PushEvent(&sdlEvent);
+          break;
 	}
 	break;
       }
