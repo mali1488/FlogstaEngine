@@ -1,15 +1,18 @@
 project(FLOGSTA_ENGINE_SRC)
 
-find_package(OpenGL)
-find_package(SDL2)
-
+find_package(OpenGL REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIR})
 #                    ${SDL2_IMAGE_INCLUDE_DIR}
 #                    ${SDL2_TTF_INCLUDE_DIR})
-target_link_libraries(target ${SDL2_LIBRARY})
+
+message("SDL2 include dir: ${SDL2_INCLUDE_DIR}")
+set(FE_SOURCES FlogstaEngine.cpp)
+
+add_executable(FE ${FE_SOURCES})
+
+target_link_libraries(FE ${SDL2_LIBRARY})
 #                             ${SDL2_IMAGE_LIBRARIES}
 #                             ${SDL2_TTF_LIBRARIES})
 
 
-add_executable(FE FlogstaEngine.cpp)
