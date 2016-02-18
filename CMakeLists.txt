@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 project(FLOGSTA_ENGINE)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
+set(OUTPUT ${PROJECT_SOURCE_DIR})
 
 find_package(SDL2 REQUIRED)
 
@@ -16,5 +17,6 @@ add_subdirectory(src)
 message("binary tree path: ${PROJECT_BINARY_DIR}")
 message("CXX FLAGS: ${CMAKE_CXX_FLAGS}")
 
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build )
 # Adding target executable
 
