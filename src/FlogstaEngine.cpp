@@ -1,4 +1,8 @@
+#if defined MACOSX
 #include <OpenGL/gl.h>
+#elif defined LINUX
+#include <GL/gl.h>
+#endif
 #include <SDL.h>
 
 //Screen dimension constants
