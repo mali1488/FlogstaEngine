@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 project(FLOGSTA_ENGINE)
 
-find_package(OpenGL)
-find_package(SDL2)
 
 # Set env
 set(CMAKE_CXX_FLAGS "-g -Wall")
