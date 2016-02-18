@@ -3,5 +3,12 @@ project(FLOGSTA_ENGINE)
 
 find_package(OpenGL)
 
+# Set env
 set(CMAKE_CXX_FLAGS "-g -Wall")
+
+# Add sub-folders/projects
 add_subdirectory(src)
+
+# Printing
+message("binary tree path: ${PROJECT_BINARY_DIR}")
+message("CXX FLAGS: ${CMAKE_CXX_FLAGS}")
