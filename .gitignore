@@ -1,2 +1,6 @@
 build/CMake*
 build/src/
+*DS_Store
+Makefile
+*~
+FE
