@@ -8,7 +8,7 @@ find_package(SDL2 REQUIRED)
 
 
 # Set env
-set(CMAKE_CXX_FLAGS "-g -Wall -std=c++11")
+set(CMAKE_CXX_FLAGS "-g -Wall -std=c++11 -framework OpenGL")
 
 # Add sub-folders/projects
 add_subdirectory(src)
