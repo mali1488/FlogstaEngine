@@ -16,7 +16,8 @@ add_subdirectory(src)
 # Printing
 message("binary tree path: ${PROJECT_BINARY_DIR}")
 message("CXX FLAGS: ${CMAKE_CXX_FLAGS}")
+message("${PROJECT_SOURCE_DIR}/build = ${PROJECT_SOURCE_DIR}/build")
 
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build )
+#set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR} )
 # Adding target executable
 
