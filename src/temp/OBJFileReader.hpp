@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <stdint.h>
 #include <vector>
-#include "GL/glew.h"
+#include <GL/glew.h>
 
 namespace cgtk {
     /* Internal structure */

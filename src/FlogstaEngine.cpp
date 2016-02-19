@@ -1,5 +1,9 @@
 #include "LibIncludes.hpp"
 #include "FeEventHandler.hpp"
+#include "../deps/glm/glm/glm.hpp"
+#include <stdio.h>
+#include <stdlib.h>
+
 //Screen dimension constants
 
 const int SCREEN_WIDTH = 640;
@@ -7,13 +11,15 @@ const int SCREEN_HEIGHT = 480;
 
 int main(int argc, char *argv[]) {
   FeEventHandler fe;
+  glm::vec3 T = glm::vec3(1.0f); 
+  printf("Vec3 test: %f, %f, %f\n",T[0],T[1],T[2]);
   
   //The window we'll be rendering to
   SDL_Window* window = NULL;
 
   //The surface contained by the window
   SDL_Surface* screenSurface = NULL;
-
+  
   //Initialize SDL
 
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
