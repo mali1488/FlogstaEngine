@@ -8,7 +8,7 @@ find_package(SDL2 REQUIRED)
 
 
 # Set env
-set(CMAKE_CXX_FLAGS "-g -Wall")
+set(CMAKE_CXX_FLAGS "-g -Wall -std=c++11")
 
 # Add sub-folders/projects
 add_subdirectory(src)
