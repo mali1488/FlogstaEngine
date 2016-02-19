@@ -35,7 +35,7 @@ struct Mesh {
 };
 
 void loadMeshTest(const std::string &filename, Mesh *mesh, int n) {
-  cgtk::OBJFileReader reader;
+  OBJFileReader reader;
   reader.load(filename.c_str(),n);
   mesh->vertices = reader.getVertices();
   mesh->normals = reader.getNormals();
