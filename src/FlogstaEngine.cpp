@@ -74,8 +74,6 @@ int main(int argc, char *argv[]) {
       screenSurface = SDL_GetWindowSurface( window );
       SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
       SDL_UpdateWindowSurface( window );
-      renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-      if (renderer == NULL) {puts("Rendere is NULL");SDL_GetError();}
   
     }
   }
@@ -103,9 +101,7 @@ int main(int argc, char *argv[]) {
   Mesh meshEarth;
   loadMeshTest("../assets/mesh/earthfix.obj" ,&meshEarth,3);
   float r = 0.0;
-  float g = 0.0;
-  float b = 0.0;
-  int angle = 1;
+  float angle = 0.0;
   while(!quit) {
     while( SDL_PollEvent( &e ) != 0 ){ //User requests quit
       switch(e.type) {
@@ -126,15 +122,15 @@ int main(int argc, char *argv[]) {
 	}
 	break;
       }
-      r = sin(angle);
-      g = cos(angle);
-      b = sin(angle);
-      
-      glClearColor ( r, g, b, 1.0 );
-      glClear ( GL_COLOR_BUFFER_BIT );
-      SDL_GL_SwapWindow(window);
-      angle++;
     }
+
+    r = (sin(angle) + 1.0)/2;
+    
+    glClearColor ( r, 0.5, 0.5, 1.0 );
+    glClear ( GL_COLOR_BUFFER_BIT );
+    SDL_GL_SwapWindow(window);
+    angle+=0.1;
+
   }
   //Destroy window
   SDL_DestroyWindow( window );

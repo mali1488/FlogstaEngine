@@ -8,8 +8,17 @@ find_package(SDL2 REQUIRED)
 
 
 # Set env
-set(CMAKE_CXX_FLAGS "-g -Wall -std=c++11 -framework OpenGL")
+set(CMAKE_CXX_FLAGS "-g -Wall -std=c++11")
 
+# Add OS Specific cpp flags
+if (WIN32)
+  message("Windows 32 bit detected")
+elseif (UNIX AND NOT APPLE)
+  message("Unix OS detectetd")
+elseif (APPLE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenGL")
+endif (APPLE)
+  
 # Add sub-folders/projects
 add_subdirectory(src)
 
