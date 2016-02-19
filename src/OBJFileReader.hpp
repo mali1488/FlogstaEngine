@@ -1,5 +1,9 @@
 #pragma once
 
+
+#ifndef OBJFILEREADER_H
+#define OBJFILEREADER_H
+
 #include "../deps/glm/glm/glm.hpp"
 #include <stdint.h>
 #include <vector>
@@ -70,3 +74,5 @@ namespace cgtk {
         
     };
 }
+
+#endif /* OBJFILEREADER_H */
