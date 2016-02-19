@@ -7,7 +7,7 @@ include_directories(${SDL2_INCLUDE_DIR})
 #                    ${SDL2_TTF_INCLUDE_DIR})
 
 message("SDL2 include dir: ${SDL2_INCLUDE_DIR}")
-set(FE_SOURCES FlogstaEngine.cpp FeEventHandler.cpp)
+set(FE_SOURCES FlogstaEngine.cpp FeEventHandler.cpp OBJFileReader.cpp)
 
 add_executable(FE ${FE_SOURCES})
 
