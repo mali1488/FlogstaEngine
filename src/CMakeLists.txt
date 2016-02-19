@@ -2,7 +2,7 @@ project(FLOGSTA_ENGINE_SRC)
 
 find_package(OpenGL REQUIRED)
 
-include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL2_INCLUDE_DIR} ${OPENGL_INCLUDE_DIRS})
 #                    ${SDL2_IMAGE_INCLUDE_DIR}
 #                    ${SDL2_TTF_INCLUDE_DIR})
 

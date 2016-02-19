@@ -47,25 +47,14 @@ void loadMeshTest(const std::string &filename, Mesh *mesh, int n) {
   mesh->uvsOriginal = reader.getUvsOriginal();
 }
 
-std::string getexepath() {
-  char result[ PATH_MAX ];
-  ssize_t count = readlink( "/proc/self/exe", result, PATH_MAX );
-  return std::string( result, (count > 0) ? count : 0 );
+void printCurrentContext(){
+  int major, minor;
+  SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
+  SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
+  std::cout << "Got OpenGL " << major << "." << minor << std::endl;
 }
 
 int main(int argc, char *argv[]) {
-  FeEventHandler fe;
-  glm::vec3 T = glm::vec3(1.0f); 
-  printf("Vec3 test: %f, %f, %f\n",T[0],T[1],T[2]);
-
-  // Try and loading a mesh from assets. The earthfix object
-  // has 3 face elements. Thas is why loadMesh is called with
-  // third argument 3. 
-  std::string s = "../assets/mesh/earthfix.obj";
-  std::cout << s << std::endl;
-  Mesh meshEarth;
-  loadMeshTest(s ,&meshEarth,3);
-  
   SDL_Window* window = NULL;
   SDL_Surface* screenSurface = NULL;
   
@@ -87,6 +76,21 @@ int main(int argc, char *argv[]) {
   bool quit = false;
   SDL_Event e;
 
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+  SDL_GLContext context = SDL_GL_CreateContext(window);
+
+  printCurrentContext();
+
+  // Try and loading a mesh from assets. The earthfix object
+  // has 3 face elements. Thas is why loadMesh is called with
+  // third argument 3. 
+  Mesh meshEarth;
+  loadMeshTest("../assets/mesh/earthfix.obj" ,&meshEarth,3);
+
+  
   while(!quit) {
     while( SDL_PollEvent( &e ) != 0 ){ //User requests quit
       switch(e.type) {
