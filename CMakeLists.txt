@@ -17,8 +17,8 @@ elseif (UNIX AND NOT APPLE)
   message("Unix OS detectetd")
 elseif (APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenGL")
-endif (APPLE)
-  
+endif (WIN32)
+
 # Add sub-folders/projects
 add_subdirectory(src)
 
