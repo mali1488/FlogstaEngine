@@ -52,7 +52,7 @@ OBJFileReader::~OBJFileReader() {}
 bool OBJFileReader::load(const char *filename, int n) {
   // Open OBJ file
   std::ifstream OBJFile(filename);
-
+  std::cout << "trying to load obj" << std::endl;
   // Original load
   if(n==1) {
     if (!OBJFile.is_open()) {
@@ -83,10 +83,11 @@ bool OBJFileReader::load(const char *filename, int n) {
 	mIndices.push_back(vertexIndex2 - 1);
       }
       else {
+	//std::cout << "strange line: " << line << std::endl;
 	// Ignore line
       }
     }
-        
+    std::cout << "close obj reader file\n";
     // Close OBJ file
     OBJFile.close();
         
@@ -102,7 +103,7 @@ bool OBJFileReader::load(const char *filename, int n) {
   }
     
   // Loading wavefront file with three face elements and has three data i each element => f v/vt/vn v/vt/vn v/vt/vn
-  if (n == 3) {
+  if (n == 3 || n == 4) {
     if (!OBJFile.is_open()) {
       std::cerr << "Could not open " << filename << std::endl;
       return false;
@@ -117,7 +118,6 @@ bool OBJFileReader::load(const char *filename, int n) {
         
     while (!OBJFile.eof()) {
       std::getline(OBJFile, line);
-      //std::cout << line.substr(0,2) << std::endl;
             
       if (line.substr(0, 2) == VERTEX_LINE) {
 	//std::cout << "vertex line" << std::endl;
@@ -169,6 +169,51 @@ bool OBJFileReader::load(const char *filename, int n) {
 	    temp = tempFaceline.substr(0,tempFaceline.size());
 	    normalIndex = std::stoi(temp)-1;
 	    mNormalIndices.push_back(normalIndex);
+	  }
+	} else if (n == 4) {
+	  int vectorIndex, UvIndex, normalIndex;
+                    
+	  std::istringstream faceLine(line.substr(2));
+	  std::string tempFaceline;
+                    
+	  size_t pos;
+	  std::string delimiter = "/";
+	  std::string temp;
+
+	  //std::cout << line.substr(2) << std::endl;
+	  for(int i = 0; i < 4; i++) {
+	    // Take out the face
+	    faceLine >> tempFaceline;
+	    //std::cout << tempFaceline << std::endl;
+
+	    // Get vertex index
+	    pos = tempFaceline.find(delimiter);
+	    temp = tempFaceline.substr(0,pos);
+	    vectorIndex = std::stoi(temp)-1;
+	    mIndices.push_back(vectorIndex);
+	    tempFaceline = tempFaceline.substr(pos + 1, tempFaceline.size());
+
+	    // TODO This should be checked everywhere
+	    if (tempFaceline.substr(0,1) == "/") {
+	      tempFaceline = tempFaceline.substr(1, tempFaceline.size());
+	      // Get normal index
+	      temp = tempFaceline.substr(0,tempFaceline.size());
+	      normalIndex = std::stoi(temp)-1;
+	      mNormalIndices.push_back(normalIndex);
+	    } else {
+
+	    // Get UV index
+	    pos = tempFaceline.find(delimiter);
+	    temp = tempFaceline.substr(0,pos);
+	    UvIndex = std::stoi(temp)-1;
+	    mUvIndices.push_back(UvIndex);
+	    tempFaceline = tempFaceline.substr(pos + 1, tempFaceline.size());
+	    
+	    // Get normal index
+	    temp = tempFaceline.substr(0,tempFaceline.size());
+	    normalIndex = std::stoi(temp)-1;
+	    mNormalIndices.push_back(normalIndex);
+	    }
 	  }
 	}
       } else if (line.substr(0, 2) == UV_LINE) {

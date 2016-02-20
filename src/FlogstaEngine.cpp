@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
   // has 3 face elements. Thas is why loadMesh is called with
   // third argument 3. 
   Mesh meshEarth;
-  loadMeshTest("../assets/mesh/earthfix.obj" ,&meshEarth,3);
+  loadMeshTest("../assets/mesh/FordMustang1966.obj" ,&meshEarth,4);
   float r = 0.0;
   float angle = 0.0;
   while(!quit) {
