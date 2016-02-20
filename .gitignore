@@ -1,6 +1,11 @@
 build/CMake*
 build/src/
+build/install_manifest.txt
+
+
 *DS_Store
+
 Makefile
+
 *~
 FE
