@@ -1,7 +1,7 @@
 #include "ShaderProgram.hpp"
 
 ShaderProgram::ShaderProgram() :
-    shaderSources(), attributeLocations(), validProgram(false), program(0) {
+  shaderSources(), attributeLocations(), validProgram(false), program(0) {
   std::cout << "Shader program construct called\n";
 }
 
@@ -13,6 +13,13 @@ void ShaderProgram::setShaderSource(const GLenum type, const std::string &source
   validProgram = false;
 }
 
+void ShaderProgram::enable() {
+  glUseProgram(program);
+}
+
+void ShaderProgram::disable() {
+  glUseProgram(0);
+}
 
 bool ShaderProgram::update() {
   if (program) 
@@ -52,6 +59,127 @@ bool ShaderProgram::update() {
   return true;
 }
 
+// ---------------- Set uniform ----------------
+bool ShaderProgram::setUniform1i(const char *name, int value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniform1i(location, value);
+  }
+  return true;
+}
+    
+bool ShaderProgram::setUniform2i(const char *name, glm::ivec2 value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniform2iv(location, 1, glm::value_ptr(value));
+  }
+  return true;
+}
+    
+bool ShaderProgram::setUniform3i(const char *name, glm::ivec3 value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniform3iv(location, 1, glm::value_ptr(value));
+  }
+  return true;
+}
+    
+bool ShaderProgram::setUniform4i(const char *name, glm::ivec4 value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniform4iv(location, 1, glm::value_ptr(value));
+  }
+  return true;
+}
+    
+bool ShaderProgram::setUniform1f(const char *name, float value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniform1f(location, value);
+  }
+  return true;
+}
+    
+bool ShaderProgram::setUniform2f(const char *name, glm::vec2 value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniform2fv(location, 1, glm::value_ptr(value));
+  }
+  return true;
+}
+    
+bool ShaderProgram::setUniform3f(const char *name, glm::vec3 value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniform3fv(location, 1, glm::value_ptr(value));
+  }
+  return true;
+}
+    
+bool ShaderProgram::setUniform4f(const char *name, glm::vec4 value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniform4fv(location, 1, glm::value_ptr(value));
+  }
+  return true;
+}
+    
+bool ShaderProgram::setUniformMatrix2f(const char *name, glm::mat2 value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniformMatrix2fv(location, 1, GL_FALSE, glm::value_ptr(value));
+  }
+  return true;
+}
+    
+bool ShaderProgram::setUniformMatrix3f(const char *name, glm::mat3 value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
+  }
+  return true;
+}
+    
+bool ShaderProgram::setUniformMatrix4f(const char *name, glm::mat4 value) {
+  GLint location = glGetUniformLocation(program, name);
+  if (location < 0) {
+    return false;
+  }
+  else {
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
+  }
+  return true;
+}
 
 // --------------- Help functions --------------
 bool ShaderProgram::linkProgram(GLuint program){
