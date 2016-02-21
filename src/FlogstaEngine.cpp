@@ -15,6 +15,21 @@
 #include <string>
 #include <limits.h>
 #include <unistd.h>
+/*
+  FAST GL TUTORIAL:
+  VBO = vertex buffer objects, this data is stored on the graphics card
+    1. glGenBuffers(int, GLuint) creats a unique id for the GLuint VBO, 
+    2. glBindBuffer(data, target) specifies the target, what the VBO will
+       be used as. Also any buffer calls  made after this will point to that VBO. 
+    3. glBufferData(type, sizeOfData, data, howShouldGLManageData) copies data into
+       the currently bound buffer.
+    
+   Send data to shader.
+     1. glVertexAttribPointer(target, sizeOfElement, type, normalizedOrNot, stride, offset)
+    
+
+*/
+
 
 // The attribute locations we will use in the vertex shader
 enum AttributeLocation {
@@ -67,7 +82,10 @@ SDL_Window* window = NULL;
 SDL_Surface* screenSurface;
 MeshVAO meshVAO;
 Mesh mesh;
+
 float zoom = 0.0f;
+float r = 0.0;
+float angle = 0.0;
 
 void printCurrentContext(){
   int major, minor;
@@ -75,10 +93,6 @@ void printCurrentContext(){
   SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
   std::cout << "Got OpenGL " << major << "." << minor << std::endl;
   std::cout << "Shader GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-}
-
-void render() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void init() {
@@ -186,7 +200,9 @@ void createMeshVAO(const Mesh &mesh, MeshVAO *meshVAO) {
 void drawMesh(ShaderProgram &program, const MeshVAO &meshVAO) {
   program.enable();
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glEnable(GL_DEPTH_TEST);
+
   GLfloat aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
   // set variables for glm::lookAt
   glm::vec3 position(0.0f, 1.0f, -6.0f);
@@ -221,12 +237,13 @@ void drawMesh(ShaderProgram &program, const MeshVAO &meshVAO) {
   program.setUniformMatrix4f("M", modelCube);
   program.setUniformMatrix4f("ModelView",view * modelCube);
   //program.setUniformMatrix4f("trackball", tr);
-  //program.setUniform1i("mappingType", globals.textureChoose);
+
   program.setUniform1f("specular_power", specularPower);
-  program.setUniform3f("ambient_color", ambientColor);
+  //program.setUniform3f("ambient_color", ambientColor);
   program.setUniform3f("light_color", light_color);
   program.setUniform3f("specular_color", specularColor);
-  program.setUniform3f("diffuseColor", diffuseColor);
+  //  program.setUniform3f("diffuseColor", diffuseColor);
+  program.setUniform3f("diffuseColor",  glm::vec3(r,r,r));
 
   
   // Activate VBO and draw
@@ -234,19 +251,12 @@ void drawMesh(ShaderProgram &program, const MeshVAO &meshVAO) {
   glDrawElements(GL_TRIANGLES, meshVAO.numIndices, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
   // Disable shader
-  program.disable();
-}
+  program.disable();}
 
 int main(int argc, char *argv[]) {
 
   init();
   glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-  // Try and loading a mesh from assets. The earthfix object
-  // has 3 face elements. Thas is why loadMesh is called with
-  // third argument 3. 
-  float r = 0.0;
-  float angle = 0.0;
 
   // compile and link shader program
   p.setShaderSource(GL_VERTEX_SHADER,"../assets/shaders/normalMapping.vert");
@@ -282,15 +292,10 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    r = (sin(angle) + 1.0)/2;
-    
-    //glClearColor ( r, 0.5, 0.5, 1.0 );
-    //glClear ( GL_COLOR_BUFFER_BIT );
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
+    r = (sin(angle) + 0.01)/2;
     drawMesh(p, meshVAO);
     SDL_GL_SwapWindow(window);
-    angle+=0.1;
+    angle+=0.01;
 
   }
 
