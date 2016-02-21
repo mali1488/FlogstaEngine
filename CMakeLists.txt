@@ -17,6 +17,9 @@ elseif (UNIX AND NOT APPLE)
   message("Unix OS detectetd")
 elseif (APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenGL -lglew")
+elseif(LINUX)
+  message("Linux OS detected")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lGL -lGLEW")  
 endif (WIN32)
 
 # Add sub-folders/projects
