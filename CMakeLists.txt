@@ -8,7 +8,7 @@ find_package(SDL2 REQUIRED)
 
 
 # Set env
-set(CMAKE_CXX_FLAGS "-g -ggdb -Wall -std=c++11 -lglew")
+set(CMAKE_CXX_FLAGS "-g -ggdb -Wall -std=c++11")
 
 # Add OS Specific cpp flags
 if (WIN32)
@@ -16,7 +16,7 @@ if (WIN32)
 elseif (UNIX AND NOT APPLE)
   message("Unix OS detectetd")
 elseif (APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenGL")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenGL -lglew")
 endif (WIN32)
 
 # Add sub-folders/projects

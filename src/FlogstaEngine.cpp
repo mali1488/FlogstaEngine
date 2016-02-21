@@ -13,10 +13,6 @@
 #include <string>
 #include <limits.h>
 #include <unistd.h>
-// Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-ShaderProgram p;
 
 // Struct for representing an indexed triangle mesh
 struct Mesh {
@@ -34,6 +30,30 @@ struct Mesh {
   std::vector<GLfloat> fvertices;
   std::vector<GLfloat> fuv;
 };
+
+// Struct for represents a vertex array object (VAO) created from a
+// mesh. Used for rendering.
+struct MeshVAO {
+    GLuint vao;
+    GLuint vertexVBO;
+    GLuint normalVBO;
+    GLuint indexVBO;
+    GLuint texCoordVBO;
+    GLuint tangetsVBO;
+    GLuint bitangentVBO;
+    int numVertices;
+    int numIndices;
+    int numUv;  
+};
+
+// Screen dimension constants
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
+
+ShaderProgram p;
+SDL_Window* window = NULL;
+SDL_Surface* screenSurface;
+MeshVAO meshVAO;
 
 void loadMeshTest(const std::string &filename, Mesh *mesh, int n) {
   OBJFileReader reader;
@@ -53,17 +73,14 @@ void printCurrentContext(){
   SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
   SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
   std::cout << "Got OpenGL " << major << "." << minor << std::endl;
+  std::cout << "Shader GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 }
 
 void render() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-int main(int argc, char *argv[]) {
-  SDL_Window* window = NULL;
-  SDL_Surface* screenSurface = NULL;
-
-
+void init() {
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
     printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
   } else {
@@ -72,7 +89,6 @@ int main(int argc, char *argv[]) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
-    printCurrentContext();
 
     //Create window
     window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
@@ -91,15 +107,25 @@ int main(int argc, char *argv[]) {
     exit(0);
   }
 
-  bool quit = false;
-  SDL_Event e;
-  
   glClearDepth(1.0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
   SDL_GL_SetSwapInterval(1);
+  
+  printCurrentContext();
+}
+
+void drawMesh(ShaderProgram &program, const MeshVAO &meshVAO) {
+  
+}
+
+int main(int argc, char *argv[]) {
+
+  init();
+  glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
   // Try and loading a mesh from assets. The earthfix object
   // has 3 face elements. Thas is why loadMesh is called with
   // third argument 3. 
@@ -107,9 +133,11 @@ int main(int argc, char *argv[]) {
   loadMeshTest("../assets/mesh/bunny.obj" ,&meshEarth,1);
   float r = 0.0;
   float angle = 0.0;
-  std::cout << "Shader GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
   p.setShaderSource(GL_VERTEX_SHADER,"../assets/shaders/normalMapping.vert");
   p.update();
+
+  bool quit = false;
+  SDL_Event e;  
 
   while(!quit) {
     while( SDL_PollEvent( &e ) != 0 ){ //User requests quit
@@ -137,10 +165,12 @@ int main(int argc, char *argv[]) {
     
     glClearColor ( r, 0.5, 0.5, 1.0 );
     glClear ( GL_COLOR_BUFFER_BIT );
+    drawMesh(p, meshVAO);
     SDL_GL_SwapWindow(window);
     angle+=0.1;
 
   }
+
   //Destroy window
   SDL_DestroyWindow( window );
   //Quit SDL subsystems
