@@ -8,7 +8,7 @@ find_package(SDL2 REQUIRED)
 
 
 # Set env
-set(CMAKE_CXX_FLAGS "-g -ggdb -Wall -std=c++11")
+set(CMAKE_CXX_FLAGS "-g -ggdb -Wall -std=c++11 -lglew")
 
 # Add OS Specific cpp flags
 if (WIN32)

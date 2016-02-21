@@ -8,7 +8,7 @@ include_directories(${SDL2_INCLUDE_DIR} ${OPENGL_INCLUDE_DIRS})
 
 message("SDL2 include dir: ${SDL2_INCLUDE_DIR}")
 
-set(FE_SOURCES FlogstaEngine.cpp FeEventHandler.cpp OBJFileReader.cpp)
+set(FE_SOURCES FlogstaEngine.cpp FeEventHandler.cpp OBJFileReader.cpp ShaderProgram.cpp)
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../build )
 
 add_executable(FE ${FE_SOURCES})

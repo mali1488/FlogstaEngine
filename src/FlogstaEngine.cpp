@@ -1,7 +1,7 @@
 #include "LibIncludes.hpp"
 #include "FeEventHandler.hpp"
 #include "OBJFileReader.hpp"
-
+#include "ShaderProgram.hpp"
 // Deps
 #include "../deps/glm/glm/glm.hpp"
 
@@ -16,7 +16,7 @@
 // Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
-SDL_Renderer* renderer;
+ShaderProgram p;
 
 // Struct for representing an indexed triangle mesh
 struct Mesh {
@@ -62,9 +62,18 @@ void render() {
 int main(int argc, char *argv[]) {
   SDL_Window* window = NULL;
   SDL_Surface* screenSurface = NULL;
+
+
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
     printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
   } else {
+    SDL_GLContext context = SDL_GL_CreateContext(window);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+    printCurrentContext();
+
     //Create window
     window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
     
@@ -77,18 +86,14 @@ int main(int argc, char *argv[]) {
   
     }
   }
+  if (glewInit()) {
+    std::cout << "Glew init failed\n";
+    exit(0);
+  }
 
   bool quit = false;
   SDL_Event e;
-
-  SDL_GLContext context = SDL_GL_CreateContext(window);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
-  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
-
-  printCurrentContext();
-
+  
   glClearDepth(1.0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
@@ -99,9 +104,13 @@ int main(int argc, char *argv[]) {
   // has 3 face elements. Thas is why loadMesh is called with
   // third argument 3. 
   Mesh meshEarth;
-  loadMeshTest("../assets/mesh/FordMustang1966.obj" ,&meshEarth,4);
+  loadMeshTest("../assets/mesh/bunny.obj" ,&meshEarth,1);
   float r = 0.0;
   float angle = 0.0;
+  std::cout << "Shader GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+  p.setShaderSource(GL_VERTEX_SHADER,"../assets/shaders/normalMapping.vert");
+  p.update();
+
   while(!quit) {
     while( SDL_PollEvent( &e ) != 0 ){ //User requests quit
       switch(e.type) {
