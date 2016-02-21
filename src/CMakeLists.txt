@@ -1,6 +1,17 @@
 project(FLOGSTA_ENGINE_SRC)
 
 find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+if (OpenGL_FOUND)
+    include_directories(${OpenGL_INCLUDE_DIRS})
+    link_libraries(${OpenGL_LIBRARIES})
+endif()
+
+if (GLEW_FOUND)
+    include_directories(${GLEW_INCLUDE_DIRS})
+    link_libraries(${GLEW_LIBRARIES})
+endif()
+
 
 include_directories(${SDL2_INCLUDE_DIR} ${OPENGL_INCLUDE_DIRS})
 #                    ${SDL2_IMAGE_INCLUDE_DIR}
