@@ -2,9 +2,9 @@ project(FLOGSTA_ENGINE_SRC)
 
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-if (OpenGL_FOUND)
-    include_directories(${OpenGL_INCLUDE_DIRS})
-    link_libraries(${OpenGL_LIBRARIES})
+if (OPENGL_FOUND)
+    include_directories(${OPENGL_INCLUDE_DIRS})
+    link_libraries(${OPENGL_LIBRARIES})
 endif()
 
 if (GLEW_FOUND)
