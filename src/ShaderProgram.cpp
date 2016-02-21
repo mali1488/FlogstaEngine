@@ -15,17 +15,14 @@ void ShaderProgram::setShaderSource(const GLenum type, const std::string &source
 
 
 bool ShaderProgram::update() {
-  std::cout << "update shader program!\n";
   if (program) 
     glDeleteProgram(program);
-  std::cout << "create program\n";
   program = glCreateProgram();
   if (!program) {
     std::cout << "program not valid\n";
     return false;
   }
 
-  std::cout << "create and attach shaders!\n";
   // Create and attach shaders to the program
   for (auto it = shaderSources.begin(); it != shaderSources.end(); ++it) {
     GLenum type = it->first;
@@ -50,7 +47,8 @@ bool ShaderProgram::update() {
   }
         
   validProgram = true;
-  
+
+  std::cout << "Shaders successfully linked and compiled!\n";
   return true;
 }
 
