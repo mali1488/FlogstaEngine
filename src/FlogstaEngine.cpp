@@ -25,8 +25,9 @@
        the currently bound buffer.
     
    Send data to shader.
-     1. glVertexAttribPointer(target, sizeOfElement, type, normalizedOrNot, stride, offset)
-    
+     1. glVertexAttribPointer(target, sizeOfElement, type, normalizedOrNot, stride, offset), 
+        describes the data we are uploading
+     2. glEnableVertexAttribArray(int) enables the attribute pointer
 
 */
 
@@ -211,12 +212,12 @@ void drawMesh(ShaderProgram &program, const MeshVAO &meshVAO) {
     
   // Create all necessary matrices
   //glm::mat4 tr = trackball.getRotationMatrix();
-  glm::mat4 modelCube = glm::mat4(1.0f);
+  glm::mat4 modelCube = glm::mat4(1.0);
   glm::mat4 view = glm::mat4(1.0f);
   glm::mat4 projection = glm::mat4(1.0f);
   view = glm::lookAt(position , direction, up);
   projection = glm::perspective(45.0f + zoom, aspect, 0.1f, 100.0f);
-  
+  modelCube = glm::rotate(modelCube, glm::radians((GLfloat)SDL_GetTicks())/10.0f, glm::vec3(0.0f, 1.0f, 0.0f));
   // TODO Fix this
   glm::vec3 light_position = glm::vec3(-7.0f,0.0f,7.0f);
   glm::vec3 light_color = glm::vec3(0.7f, 0.7f, 0.7f);
@@ -243,7 +244,7 @@ void drawMesh(ShaderProgram &program, const MeshVAO &meshVAO) {
   program.setUniform3f("light_color", light_color);
   program.setUniform3f("specular_color", specularColor);
   //  program.setUniform3f("diffuseColor", diffuseColor);
-  program.setUniform3f("diffuseColor",  glm::vec3(r,r,r));
+  program.setUniform3f("diffuseColor",  glm::vec3(0.0f,r,0.0f));
 
   
   // Activate VBO and draw
@@ -251,7 +252,8 @@ void drawMesh(ShaderProgram &program, const MeshVAO &meshVAO) {
   glDrawElements(GL_TRIANGLES, meshVAO.numIndices, GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
   // Disable shader
-  program.disable();}
+  program.disable();
+}
 
 int main(int argc, char *argv[]) {
 
