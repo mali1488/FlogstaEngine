@@ -239,6 +239,7 @@ GLuint ShaderProgram::createShader(GLenum type, const char* shader_source) {
     glDeleteShader(shader);
     return 0;
   }
+  //showShaderInfoLog(shader);
   return shader;
 }
 

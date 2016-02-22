@@ -1,7 +1,8 @@
 #version 120 
 //attribute vec4 inPosition;
+attribute vec3 normal;
 attribute vec4 inPosition; 
-attribute vec3 normal; 
+
 
 uniform mat4 M;
 uniform mat4 V;
