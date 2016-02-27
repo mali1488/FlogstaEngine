@@ -1,7 +1,7 @@
 build/CMake*
 build/src/
 build/install_manifest.txt
-
+build/cmake_install.cmake
 
 *DS_Store
 
