@@ -1,16 +1,3 @@
-#include "LibIncludes.hpp"
-#include "FeEventHandler.hpp"
-#include "OBJFileReader.hpp"
-#include "ShaderProgram.hpp"
-#include "FlogstaEngine.hpp"
-#include "Mesh3D.hpp"
-#include "Mesh2D.hpp"
-// Deps
-#include "../deps/glm/glm/glm.hpp"
-#include "../deps/glm/glm/gtc/matrix_transform.hpp"
-#include "../deps/glm/glm/gtc/matrix_inverse.hpp"
-#include "../deps/glm/glm/gtc/type_ptr.hpp"
-
 // Standard
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,6 +6,19 @@
 #include <string>
 #include <limits.h>
 #include <unistd.h>
+// Deps
+#include "../deps/glm/glm/glm.hpp"
+#include "../deps/glm/glm/gtc/matrix_transform.hpp"
+#include "../deps/glm/glm/gtc/matrix_inverse.hpp"
+#include "../deps/glm/glm/gtc/type_ptr.hpp"
+
+#include "LibIncludes.hpp"
+#include "FeEventHandler.hpp"
+#include "OBJFileReader.hpp"
+#include "ShaderProgram.hpp"
+#include "FlogstaEngine.hpp"
+#include "Mesh3D.hpp"
+#include "Mesh2D.hpp"
 
 /*
   FAST GL TUTORIAL:
@@ -85,10 +85,10 @@ bool FlogstaEngine::init() {
   }
     
   SDL_GLContext context = NULL;
-  // SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-  // SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  // SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     
   context = SDL_GL_CreateContext(window);
   printCurrentContext();
@@ -129,7 +129,6 @@ bool FlogstaEngine::init() {
   glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
   SDL_GL_SetSwapInterval(1);
   
-  printCurrentContext();
   glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
   return true;
 }

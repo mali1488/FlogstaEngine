@@ -4,7 +4,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(SDL2 REQUIRED)
 
-set(FE_SOURCES FlogstaEngine.cpp FeEventHandler.cpp OBJFileReader.cpp ShaderProgram.cpp Mesh3D.cpp Mesh2D.cpp main.cpp)
+set(FE_SOURCES FlogstaEngine.cpp ShaderLibrary.cpp FeEventHandler.cpp OBJFileReader.cpp ShaderProgram.cpp Mesh3D.cpp Mesh2D.cpp main.cpp)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../build )
 
 add_executable(FE ${FE_SOURCES})

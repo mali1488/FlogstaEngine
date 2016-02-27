@@ -13,6 +13,12 @@
 #include <vector>
 #include "OBJFileReader.hpp"
 
+typedef struct Vertex {
+  float position[3];
+  float normal[3];
+  float st[2];
+} Vertex;
+
 class Mesh3D {
 public:
   Mesh3D();
