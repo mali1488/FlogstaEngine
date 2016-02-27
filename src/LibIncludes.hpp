@@ -7,6 +7,7 @@
     #include <OpenGL/glew.h>
   #elif defined LINUX
     #include <GL/glew.h>
+    #include <GL/gl.h>
   #endif
   #include <SDL.h>
 

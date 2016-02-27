@@ -56,49 +56,63 @@ FlogstaEngine::~FlogstaEngine(){
 
 
 void FlogstaEngine::printCurrentContext(){
-  int major, minor;
+  int major, minor, db;
   SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
   SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
-  std::cout << "Got OpenGL " << major << "." << minor << std::endl;
-  std::cout << "Shader GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+  SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &db);
+  std::cout << "SDL2 OpenGL version: " << major << "." << minor << std::endl << "       depth buffer: " << db << std::endl;
+  printf("OpenGL version: %s\n", glGetString(GL_VERSION));
+  printf("        vendor: %s\n", glGetString(GL_VENDOR));
+  printf("      renderer: %s\n", glGetString(GL_RENDERER));
+  printf("  glsl version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 
 bool FlogstaEngine::init() {
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
-    printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+    fprintf(stderr, "SDL_Init failed with reason: %s\n", strerror(errno));
     return false;
-  } else {
-    SDL_GLContext context = SDL_GL_CreateContext(window);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
-
-    //Create window
-    window = SDL_CreateWindow("Flogsta Engine 0.0.1", SDL_WINDOWPOS_CENTERED,
-                              SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT,
-                              SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-    
-    if(window == NULL) {
-      printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-      fprintf(stderr, "SDL_CreateWindow failed with reason: %s\n",
-              strerror(errno));
-      return false;
-    }
-    
-    screenSurface = SDL_GetWindowSurface( window );
-
-    if (screenSurface == NULL) {
-      printf("screenSurface returned null, quitting...\n");
-      fprintf(stderr, "SDL_GetWindowSurface failed with reason: %s\n",
-              strerror(errno));
-      return false;
-    }
-    
-    SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
-    SDL_UpdateWindowSurface( window );
   }
+
+  window = SDL_CreateWindow("Flogsta Engine 0.0.1", SDL_WINDOWPOS_CENTERED,
+                            SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT,
+                            SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+  if(window == NULL) {
+    printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+    fprintf(stderr, "SDL_CreateWindow failed with reason: %s\n",
+            strerror(errno));
+    return false;
+  }
+    
+  SDL_GLContext context = NULL;
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  // SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+    
+  context = SDL_GL_CreateContext(window);
+  printCurrentContext();
+  if (context == NULL) {
+    fprintf(stderr, "SDL_GLContext context = NULL. Failed with reason: %s\n",
+            SDL_GetError());
+    return false;
+  }
+
+    
+  //Create window
+    
+  screenSurface = SDL_GetWindowSurface( window );
+
+  if (screenSurface == NULL) {
+    printf("screenSurface returned null, quitting...\n");
+    fprintf(stderr, "SDL_GetWindowSurface failed with reason: %s\n",
+            strerror(errno));
+    return false;
+  }
+    
+  SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+  SDL_UpdateWindowSurface( window );
+
   
   glewExperimental = GL_TRUE; 
   if (glewInit()) {
