@@ -70,10 +70,10 @@ bool FlogstaEngine::init() {
     return false;
   } else {
     SDL_GLContext context = SDL_GL_CreateContext(window);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
 
     //Create window
     window = SDL_CreateWindow("Flogsta Engine 0.0.1", SDL_WINDOWPOS_CENTERED,
@@ -82,20 +82,18 @@ bool FlogstaEngine::init() {
     
     if(window == NULL) {
       printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-      return false;
-    } else {
       fprintf(stderr, "SDL_CreateWindow failed with reason: %s\n",
               strerror(errno));
+      return false;
     }
     
     screenSurface = SDL_GetWindowSurface( window );
 
     if (screenSurface == NULL) {
       printf("screenSurface returned null, quitting...\n");
-      return false;
-    } else {
       fprintf(stderr, "SDL_GetWindowSurface failed with reason: %s\n",
               strerror(errno));
+      return false;
     }
     
     SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
