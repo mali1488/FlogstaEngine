@@ -23,24 +23,24 @@
 /*
   FAST GL TUTORIAL:
   VBO = vertex buffer objects, this data is stored on the graphics card
-    1. glGenBuffers(int, GLuint) creats a unique id for the GLuint VBO, 
-    2. glBindBuffer(data, target) specifies the target, what the VBO will
-       be used as. Also any buffer calls  made after this will point to that VBO. 
-    3. glBufferData(type, sizeOfData, data, howShouldGLManageData) copies data into
-       the currently bound buffer.
+  1. glGenBuffers(int, GLuint) creats a unique id for the GLuint VBO, 
+  2. glBindBuffer(data, target) specifies the target, what the VBO will
+  be used as. Also any buffer calls  made after this will point to that VBO. 
+  3. glBufferData(type, sizeOfData, data, howShouldGLManageData) copies data into
+  the currently bound buffer.
     
-   Send data to shader.
-     1. glVertexAttribPointer(target, sizeOfElement, type, normalizedOrNot, stride, offset), 
-        describes the data we are uploading
-     2. glEnableVertexAttribArray(int) enables the attribute pointer
+  Send data to shader.
+  1. glVertexAttribPointer(target, sizeOfElement, type, normalizedOrNot, stride, offset), 
+  describes the data we are uploading
+  2. glEnableVertexAttribArray(int) enables the attribute pointer
 
-   VAO = Vertex array object, ocntains one or several VBO. Note that it contains
-         the exact same data, it is the same reference. 
-      1. glGenVertexArrays(n, VAOs), generates a VBO object
-      2. glBindVertexArray(VAO), bind a vertex array object
-      3. Repeat for each VBO, glBindBuffer(type, VAO) bind the data
-      4. glEnableVertexAttribArray(index) enables the data at index
-*/
+  VAO = Vertex array object, ocntains one or several VBO. Note that it contains
+  the exact same data, it is the same reference. 
+  1. glGenVertexArrays(n, VAOs), generates a VBO object
+  2. glBindVertexArray(VAO), bind a vertex array object
+  3. Repeat for each VBO, glBindBuffer(type, VAO) bind the data
+  4. glEnableVertexAttribArray(index) enables the data at index
+  1*/
 
 FlogstaEngine::FlogstaEngine(int choice) {
   printf("Running as %dD engine!\n",choice);
@@ -65,35 +65,51 @@ void FlogstaEngine::printCurrentContext(){
 
 
 bool FlogstaEngine::init() {
-    if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
+  if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
     printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
     return false;
   } else {
     SDL_GLContext context = SDL_GL_CreateContext(window);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 
     //Create window
-    window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+    window = SDL_CreateWindow("Flogsta Engine 0.0.1", SDL_WINDOWPOS_CENTERED,
+                              SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT,
+                              SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     
-    if( window == NULL ) {
+    if(window == NULL) {
       printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
       return false;
     } else {
-      screenSurface = SDL_GetWindowSurface( window );
-      SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
-      SDL_UpdateWindowSurface( window );
-  
+      fprintf(stderr, "SDL_CreateWindow failed with reason: %s\n",
+              strerror(errno));
     }
+    
+    screenSurface = SDL_GetWindowSurface( window );
+
+    if (screenSurface == NULL) {
+      printf("screenSurface returned null, quitting...\n");
+      return false;
+    } else {
+      fprintf(stderr, "SDL_GetWindowSurface failed with reason: %s\n",
+              strerror(errno));
+    }
+    
+    SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+    SDL_UpdateWindowSurface( window );
   }
+  
   glewExperimental = GL_TRUE; 
   if (glewInit()) {
     std::cout << "Glew init failed\n";
     return false;
   }
 
+  std::cout << "glewInit passed\n";
+  
   glClearDepth(1.0);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
@@ -157,8 +173,8 @@ void FlogstaEngine::drawMesh(Mesh3D mesh) {
   
   // Activate VBO and draw
   /*glBindVertexArray(vao);
-  glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
-  glBindVertexArray(0);
+    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
   */
   mesh.bindAndDraw();
   // Disable shader

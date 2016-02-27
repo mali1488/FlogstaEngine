@@ -4,7 +4,6 @@ project(FLOGSTA_ENGINE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 set(OUTPUT ${PROJECT_SOURCE_DIR})
 
-find_package(SDL2 REQUIRED)
 
 
 # Set env
@@ -14,19 +13,19 @@ set(CMAKE_CXX_FLAGS "-g -ggdb -Wall -std=c++11")
 if (WIN32)
   message("Windows 32 bit detected")
 elseif (UNIX AND NOT APPLE)
-  message("Unix OS detectetd")
+  set(LINUX TRUE)
 elseif (APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenGL -lglew")
-elseif(LINUX)
+endif(WIN32)
+if(LINUX)
   message("Linux OS detected")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lGL -lGLEW")  
-endif (WIN32)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif(LINUX)
 
 # Add sub-folders/projects
 add_subdirectory(src)
 
 # Printing
-message("binary tree path: ${PROJECT_BINARY_DIR}")
 message("CXX FLAGS: ${CMAKE_CXX_FLAGS}")
 message("${PROJECT_SOURCE_DIR}/build = ${PROJECT_SOURCE_DIR}/build")
 

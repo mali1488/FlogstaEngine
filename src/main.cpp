@@ -15,7 +15,10 @@
 int main(int argc, char *argv[]) {
 
   FlogstaEngine FE(3);
-  FE.init();
+  if (FE.init() == false) {
+    printf("Could not initialise the engine...\n");
+    return 1;
+  }
   Mesh3D mesh3d;
 
   // compile and link shader program
